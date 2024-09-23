@@ -1,0 +1,32 @@
+{
+  "name": "out",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "mongodb": "^6.9.0",
+    "next": "14.2.10",
+    "qrcode": "^1.5.4",
+    "qrcode.react": "^4.0.1",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-qr-reader": "^3.0.0-beta-1",
+    "react-qr-scanner": "^1.0.0-alpha.11"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.10",
+    "ethers": "^6.13.2",
+    "hardhat": "^2.22.10",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.12"
+  }
+}
