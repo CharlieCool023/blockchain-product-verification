@@ -15,16 +15,15 @@ export default function AdminPage() {
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const [success, setSuccess] = useState(false); // Success state
 
+  // Connect wallet function
   const connectWallet = async () => {
     try {
       if (!window.ethereum) {
         alert("MetaMask is not installed. Please install it to use this feature.");
         return;
       }
-
       const provider = new ethers.BrowserProvider(window.ethereum);
       const accounts = await provider.send("eth_requestAccounts", []);
-
       if (accounts.length > 0) {
         setWalletAddress(accounts[0]);
         setIsWalletConnected(true);
@@ -36,6 +35,7 @@ export default function AdminPage() {
     }
   };
 
+  // Handle form submit to add product
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -85,110 +85,116 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="p-4">
-      {!success ? (
-        <div>
-          <h1 className="text-2xl font-bold mb-4">Add New Product</h1>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="w-full max-w-lg bg-white rounded-lg shadow-lg p-8">
+        {!success ? (
+          <div>
+            <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Add New Product</h1>
 
-          {/* Connect Wallet Button */}
-          {!isWalletConnected ? (
-            <button
-              onClick={connectWallet}
-              className="bg-blue-500 text-white py-2 px-4 rounded mb-4"
-            >
-              Connect Wallet
-            </button>
-          ) : (
-            <div className="mb-4">
-              <p className="text-green-500">Wallet Connected: {walletAddress}</p>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit}>
-            <label className="block mb-2">
-              Product Name:
-              <input
-                type="text"
-                value={productName}
-                onChange={(e) => setProductName(e.target.value)}
-                required
-                className="mt-1 block w-full border border-gray-300 rounded p-2"
-              />
-            </label>
-
-            <label className="block mb-2">
-              Production Date:
-              <input
-                type="date"
-                value={productionDate}
-                onChange={(e) => setProductionDate(e.target.value)}
-                required
-                className="mt-1 block w-full border border-gray-300 rounded p-2"
-              />
-            </label>
-
-            <label className="block mb-2">
-              Expiry Date:
-              <input
-                type="date"
-                value={expiryDate}
-                onChange={(e) => setExpiryDate(e.target.value)}
-                required
-                className="mt-1 block w-full border border-gray-300 rounded p-2"
-              />
-            </label>
-
-            <label className="block mb-4">
-              Medical Information:
-              <input
-                type="text"
-                value={medicalInfo}
-                onChange={(e) => setMedicalInfo(e.target.value)}
-                required
-                className="mt-1 block w-full border border-gray-300 rounded p-2"
-              />
-            </label>
-
-            <button
-              type="submit"
-              className={`${
-                isWalletConnected ? "bg-green-500" : "bg-gray-500 cursor-not-allowed"
-              } text-white py-2 px-4 rounded`}
-              disabled={!isWalletConnected}
-            >
-              {isLoading ? "Adding Product..." : "Add Product"}
-            </button>
-          </form>
-
-          {isLoading && <p className="mt-4">Please wait, your product is being added...</p>}
-        </div>
-      ) : (
-        <div>
-          <h1 className="text-2xl font-bold mb-4">Thank You!</h1>
-          <p>Your product has been successfully added to the blockchain.</p>
-          <div className="mt-4">
-            <h3 className="text-xl">Product Details:</h3>
-            <p><strong>Product Name:</strong> {productName}</p>
-            <p><strong>Production Date:</strong> {productionDate}</p>
-            <p><strong>Expiry Date:</strong> {expiryDate}</p>
-            <p><strong>Medical Information:</strong> {medicalInfo}</p>
-            <p><strong>Product ID:</strong> {productId}</p>
-
-            {qrCodeUrl && (
-              <div className="mt-4">
-                <img src={qrCodeUrl} alt="Product QR Code" />
+            {/* Connect Wallet Button */}
+            {!isWalletConnected ? (
+              <div className="text-center mb-6">
+                <button
+                  onClick={connectWallet}
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg transition duration-300 shadow-md"
+                >
+                  Connect Wallet
+                </button>
+              </div>
+            ) : (
+              <div className="text-center mb-6">
+                <p className="text-green-600 font-medium">Wallet Connected: {walletAddress}</p>
               </div>
             )}
-          </div>
 
-          <button
-            onClick={() => window.location.reload()}
-            className="bg-blue-500 text-white py-2 px-4 rounded mt-4"
-          >
-            Return to Admin Page
-          </button>
-        </div>
-      )}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Product Name</label>
+                <input
+                  type="text"
+                  value={productName}
+                  onChange={(e) => setProductName(e.target.value)}
+                  required
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Production Date</label>
+                <input
+                  type="date"
+                  value={productionDate}
+                  onChange={(e) => setProductionDate(e.target.value)}
+                  required
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Expiry Date</label>
+                <input
+                  type="date"
+                  value={expiryDate}
+                  onChange={(e) => setExpiryDate(e.target.value)}
+                  required
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Medical Information</label>
+                <input
+                  type="text"
+                  value={medicalInfo}
+                  onChange={(e) => setMedicalInfo(e.target.value)}
+                  required
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div className="text-center mt-6">
+                <button
+                  type="submit"
+                  className={`${
+                    isWalletConnected ? "bg-green-500 hover:bg-green-600" : "bg-gray-500 cursor-not-allowed"
+                  } text-white font-semibold py-2 px-6 rounded-lg transition duration-300 shadow-md`}
+                  disabled={!isWalletConnected}
+                >
+                  {isLoading ? "Adding Product..." : "Add Product"}
+                </button>
+              </div>
+            </form>
+
+            {isLoading && <p className="text-center text-gray-600 mt-4">Please wait, your product is being added...</p>}
+          </div>
+        ) : (
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-green-600 mb-6">Thank You!</h1>
+            <p>Your product has been successfully added to the blockchain.</p>
+            <div className="mt-6">
+              <h3 className="text-xl font-semibold text-gray-700">Product Details:</h3>
+              <p><strong>Name:</strong> {productName}</p>
+              <p><strong>Production Date:</strong> {productionDate}</p>
+              <p><strong>Expiry Date:</strong> {expiryDate}</p>
+              <p><strong>Medical Info:</strong> {medicalInfo}</p>
+              <p><strong>Product ID:</strong> {productId}</p>
+
+              {qrCodeUrl && (
+                <div className="mt-6">
+                  <img src={qrCodeUrl} alt="Product QR Code" className="inline-block" />
+                </div>
+              )}
+            </div>
+
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg mt-6 transition duration-300 shadow-md"
+            >
+              Return to Admin Page
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
