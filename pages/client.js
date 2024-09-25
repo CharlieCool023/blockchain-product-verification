@@ -5,13 +5,12 @@ import QRCode from "qrcode";
 export default function ClientPage() {
   const [productId, setProductId] = useState("");
   const [productData, setProductData] = useState(null);
-  const [qrCodeUrl, setQrCodeUrl] = useState(null); // Store the QR Code
-  const [isLoading, setIsLoading] = useState(false); // Loading state
-  const [success, setSuccess] = useState(false); // Success state
+  const [qrCodeUrl, setQrCodeUrl] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    // Automatically fetch product data if productId is present in the URL
     const productIdFromUrl = router.query.productId;
     if (productIdFromUrl) {
       setProductId(productIdFromUrl);
@@ -29,7 +28,7 @@ export default function ClientPage() {
   };
 
   const fetchProductData = async (id) => {
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
 
     try {
       const response = await fetch(`/api/get-product?productId=${id}`);
@@ -37,13 +36,10 @@ export default function ClientPage() {
 
       if (data.success) {
         setProductData(data.product);
-
-        // Generate the QR code
         const qrCodeData = `${window.location.origin}/client?productId=${id}`;
         const qrCodeUrl = await QRCode.toDataURL(qrCodeData);
         setQrCodeUrl(qrCodeUrl);
-
-        setSuccess(true); // Show success
+        setSuccess(true);
       } else {
         alert(data.message);
       }
@@ -52,34 +48,42 @@ export default function ClientPage() {
       alert("Error fetching product data.");
     }
 
-    setIsLoading(false); // Stop loading
+    setIsLoading(false);
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="w-full max-w-lg bg-white rounded-lg shadow-lg p-8">
-        {!success ? (
-          <div>
-            <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Verify Product</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 to-purple-100 p-4">
+      <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl p-8 relative overflow-hidden">
+        
+        {/* Adding an SVG illustration on the top right corner */}
+        <svg className="absolute top-0 right-0 w-32 h-32 opacity-10" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#D4CFFF" d="M58.4,-62.5C73.2,-51.4,78.7,-25.7,73.4,-5.6C68.1,14.5,52,29,37.3,43.8C22.7,58.6,9.3,73.8,-5.1,76.7C-19.5,79.6,-38.9,70.2,-52.6,55.4C-66.2,40.6,-74.1,20.3,-74.8,-0.5C-75.5,-21.4,-69,-42.8,-55.4,-54.2C-41.8,-65.5,-20.9,-66.7,2.5,-68.4C25.8,-70.1,51.7,-72.7,58.4,-62.5Z" transform="translate(100 100)" />
+        </svg>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+        {!success ? (
+          <div className="relative z-10">
+            <h1 className="text-4xl font-extrabold text-center text-gray-800 mb-8">Verify Product</h1>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Enter Product ID</label>
+                <label className="block text-sm font-medium text-gray-600 mb-2">Enter Product ID</label>
                 <input
                   type="text"
                   value={productId}
                   onChange={handleInputChange}
                   required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full border border-gray-300 rounded-lg p-3 shadow focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
-              <div className="text-center mt-6">
+              <div className="text-center">
                 <button
                   type="submit"
-                  className={`${
-                    isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
-                  } text-white font-semibold py-2 px-6 rounded-lg transition duration-300 shadow-md`}
+                  className={`w-full py-3 rounded-lg text-white font-semibold shadow-lg transition duration-300 ${
+                    isLoading
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-indigo-500 hover:bg-indigo-600"
+                  }`}
                   disabled={isLoading}
                 >
                   {isLoading ? "Verifying..." : "Verify Product"}
@@ -87,31 +91,33 @@ export default function ClientPage() {
               </div>
             </form>
 
-            {isLoading && <p className="text-center text-gray-600 mt-4">Fetching product data, please wait...</p>}
+            {isLoading && (
+              <p className="text-center text-gray-600 mt-4">Fetching product data, please wait...</p>
+            )}
           </div>
         ) : (
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-green-600 mb-6">Product Verified!</h1>
-            <p>The product details have been successfully verified.</p>
+            <h1 className="text-4xl font-extrabold text-green-600 mb-8">Product Verified!</h1>
+            <p className="text-gray-600 mb-6">The product details have been successfully verified.</p>
 
-            <div className="mt-6">
-              <h3 className="text-xl font-semibold text-gray-700">Product Details:</h3>
-              <p><strong>Name:</strong> {productData.name}</p>
-              <p><strong>Production Date:</strong> {productData.productionDate}</p>
-              <p><strong>Expiry Date:</strong> {productData.expiryDate}</p>
-              <p><strong>Medical Information:</strong> {productData.medicalInfo}</p>
-              <p><strong>Product ID:</strong> {productId}</p>
+            <div className="bg-gray-50 p-6 rounded-lg shadow-lg mb-6">
+              <h3 className="text-2xl font-semibold text-gray-700 mb-4">Product Details:</h3>
+              <p className="mb-2"><strong>Name:</strong> {productData.name}</p>
+              <p className="mb-2"><strong>Production Date:</strong> {productData.productionDate}</p>
+              <p className="mb-2"><strong>Expiry Date:</strong> {productData.expiryDate}</p>
+              <p className="mb-4"><strong>Medical Information:</strong> {productData.medicalInfo}</p>
+              <p className="mb-4"><strong>Product ID:</strong> {productId}</p>
 
               {qrCodeUrl && (
-                <div className="mt-6">
-                  <img src={qrCodeUrl} alt="Product QR Code" className="inline-block" />
+                <div className="mt-4">
+                  <img src={qrCodeUrl} alt="Product QR Code" className="inline-block border border-gray-300 rounded-lg shadow-lg" />
                 </div>
               )}
             </div>
 
             <button
               onClick={() => window.location.reload()}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg mt-6 transition duration-300 shadow-md"
+              className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 px-8 rounded-lg transition duration-300 shadow-lg"
             >
               Verify Another Product
             </button>

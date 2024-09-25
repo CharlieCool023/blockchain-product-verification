@@ -7,8 +7,8 @@ export default function WelcomePage() {
     router.push("/client");
   };
 
-  const navigateToAdmin = () => {
-    router.push("/admin");
+  const navigateToLogin = () => {
+    router.push("/login");
   };
 
   return (
@@ -28,7 +28,7 @@ export default function WelcomePage() {
 
           {/* Admin Authentication Button */}
           <button
-            onClick={navigateToAdmin}
+            onClick={navigateToLogin}
             className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-lg transition duration-300"
           >
             Admin Login
