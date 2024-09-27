@@ -14,8 +14,8 @@ export default function WelcomePage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
       <div className="text-center">
-        <h1 className="text-5xl font-bold mb-4">Welcome to Product Verification</h1>
-        <p className="text-xl mb-6">Easily verify the authenticity of products or manage your inventory.</p>
+        <h1 className="text-5xl font-bold mb-4">BLOCKCHAIN PRODUCT VERIFICATION</h1>
+        <p className="text-xl mb-6">Easily verify the authenticity of food products to combact food fraud.</p>
 
         <div className="flex justify-center space-x-4">
           {/* Client Verification Button */}
@@ -23,7 +23,7 @@ export default function WelcomePage() {
             onClick={navigateToClient}
             className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-lg shadow-lg transition duration-300"
           >
-            Verify Products
+            Get Started
           </button>
 
           {/* Admin Authentication Button */}
@@ -35,6 +35,7 @@ export default function WelcomePage() {
           </button>
         </div>
       </div>
+      <footer className="mt-8 text-center text-gray-400 text-xs"> CharlieCool © 2024 - All Rights Reserved.</footer>
     </div>
   );
 }

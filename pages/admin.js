@@ -109,6 +109,7 @@ export default function AdminPage() {
             {/* Connect Wallet Button */}
             {!isWalletConnected ? (
               <div className="text-center">
+                <h5 className="text-gray-600 mb-6">Connect your wallet to add a new product.</h5>
                 <button
                   onClick={connectWallet}
                   className="bg-indigo-500 hover:bg-indigo-600 text-white py-3 px-6 rounded-lg shadow-lg transition duration-300 mb-6"
